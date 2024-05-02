@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Adivinanza</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        p#message {
+            color: blue;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Juego de Adivinanza</h1>
+    <p>Adivina el número entre 1 y 100:</p>
+    <input type="text" id="guessField">
+    <button onclick="checkGuess()">Adivinar</button>
+    <p id="message"></p>
+    <p>Intentos: <span id="attempts">0</span></p>
+    <p>Números intentados:</p>
+    <ul id="attemptedList"></ul>
+
+    <script>
+        var randomNumber = Math.floor(Math.random() * 100) + 1;
+        var guessField = document.getElementById("guessField");
+        var message = document.getElementById("message");
+        var attemptsSpan = document.getElementById("attempts");
+        var attemptedList = document.getElementById("attemptedList");
+        var attempts = 0;
+        var attemptedNumbers = [];
+
+        function checkGuess() {
+            var userGuess = parseInt(guessField.value);
+            if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+                message.textContent = "Por favor, ingresa un número válido entre 1 y 100.";
+                return;
+            }
+
+            attempts++;
+            attemptsSpan.textContent = attempts;
+
+            if (attemptedNumbers.includes(userGuess)) {
+                message.textContent = "Ya has intentado este número. Intenta con otro.";
+            } else {
+                attemptedNumbers.push(userGuess);
+                var listItem = document.createElement("li");
+                listItem.textContent = userGuess;
+                attemptedList.appendChild(listItem);
+
+                if (userGuess === randomNumber) {
+                    message.textContent = "¡Felicidades! ¡Has adivinado el número!";
+                } else if (userGuess < randomNumber) {
+                    message.textContent = "El número es mayor. Intenta de nuevo.";
+                } else {
+                    message.textContent = "El número es menor. Intenta de nuevo.";
+                }
+            }
+
+            guessField.value = "";
+            guessField.focus();
+        }
+    </script>
+</body>
+</html>
